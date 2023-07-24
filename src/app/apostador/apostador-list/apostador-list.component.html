@@ -1,0 +1,31 @@
+<app-header></app-header>
+<div class="container my-4">
+  <div class="row">
+    <div class="col-4">
+      <div class="card">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-10 text-center">
+              <label class="fs-4">Apostadores</label>
+            </div>
+            <div class="col-2 text-center">
+              <button type="button" class="my-1 btn btn-outline-warning btn-circle" (click)="irCrearApostador()"><i
+                  class="bi bi-plus-lg"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+
+          <table class="table table-hover mb-0" aria-describedby="colecName">
+            <tbody>
+              <tr *ngFor="let apostador of apostadores">
+                <td>{{apostador.nombreApostador}}</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

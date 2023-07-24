@@ -1,0 +1,57 @@
+
+name: CI_Features_2_Dev
+
+# Controls when the action will run. 
+on:
+  push:
+    branches: 'EPWG4**'
+
+jobs:
+  job1:
+    name: Merge
+    runs-on: ubuntu-latest
+    if: ${{ contains(github.event.head_commit.message, 'FIN') }}
+    steps:
+    - name: Mezcla rama1 -> rama2
+      uses: tukasz/direct-merge-action@master
+      with:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         source-branch: develop
+         target-branch: ${{ github.ref }}
+  job2:
+    name: Pruebas
+    runs-on: ubuntu-latest
+    needs: job1 
+    strategy:
+      matrix:
+        node-version: [14.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - name: Checkout de repositorio
+        uses: actions/checkout@v2
+      - name: Crear rama release
+        run: |
+          git checkout -b release
+          git push -f -u origin release
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install -g @angular/cli @angular/compiler-cli typescript
+      - run: npm install --force
+      - run: npm install -g @angular/cli@12.1.2
+      - run: npm install @angular/animations
+      - run: ng test --browsers ChromeHeadless --watch=false
+  job3:
+    name: MergeRev
+    runs-on: ubuntu-latest
+    needs: job2
+    steps:
+    - name: Mezcla rama1 -> rama2
+      uses: tukasz/direct-merge-action@master
+      with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          source-branch: ${{ github.ref }}
+          target-branch: develop

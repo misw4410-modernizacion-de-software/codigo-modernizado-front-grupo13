@@ -1,0 +1,49 @@
+<app-header></app-header>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-10">
+      <div class="card mx-3 my-5">
+        <div class="row">
+          <div class="col-12 text-center">
+            <p class="mt-5 mb-2 fs-3 fw-bold">Crear apostador</p>
+          </div>
+        </div>
+        <form class="mx-5 my-3" [formGroup]="apostadorForm" (ngSubmit)="createApostador(apostadorForm.value)">
+          <div class="form-group my-2">
+            <div class="row">
+              <div class="col-2 text-start">
+                <label for="nombre">Nombre </label>
+              </div>
+              <div class="col-10">
+                <input type="text" class="form-control" formControlName="nombre" placeholder="Nombre de la apostador">
+              </div>
+            </div>
+            <div class="row mt-4">
+              <div class="col-6 text-end">
+                <button type="submit" class="btn btn-warning" [disabled]="!apostadorForm?.valid">Crear</button>
+              </div>
+              <div class="col-6 text-start">
+                <button class="btn btn-danger" (click)="cancelCreate()">Cancelar</button>
+              </div>
+            </div>
+            <div class="row justify-content-center">
+              <div class="col-12">
+                <div class="alert alert-danger my-3"
+                  *ngIf="apostadorForm?.get('nombre')?.hasError('required') && apostadorForm?.get('nombre')?.touched">
+                  Debe ingresar un nombre para la apostador
+                </div>
+                <div class="alert alert-danger my-3" *ngIf="apostadorForm?.get('nombre')?.hasError('minlength')">
+                  El nombre debe tener por lo menos un carácter
+                </div>
+                <div class="alert alert-danger my-3" *ngIf="apostadorForm?.get('nombre')?.hasError('maxlength')">
+                  El nombre no debe exceder los 128 carácteres
+                </div>
+              </div>
+            </div>
+            <br>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
